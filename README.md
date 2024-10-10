@@ -7,3 +7,7 @@ I founded [codeBOX](https://github.com/gocodebox) in 2012 and served as a produc
 Since 2023 I've worked as a developer and project manager at [Caseproof](https://github.com/caseproof), the team behind [MemberPress](https://memberpress.com) and many other WordPress plugins.
 
 For more information about me check out [tomweights.com](https://tomweights.com)
+
+---
+
+![Now Playing](https://lastfm-profile-readme.vercel.app/api/thomasplevy)

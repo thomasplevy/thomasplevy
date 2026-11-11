@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="136" viewBox="0 0 600 136" role="img" aria-label="Most recent cup: Presta Coffee Roasters Ethiopia Honey Koke">
+  <!-- Icon based on Tabler Icons "coffee" by Paweł Kuna. MIT License. https://github.com/tabler/tabler-icons Copyright (c) 2020-2026 Paweł Kuna. -->
+  <title>Most recent cup: Presta Coffee Roasters Ethiopia Honey Koke</title>
+  <rect x="0.75" y="0.75" width="598.5" height="134.5" rx="12" fill="#0d1117" stroke="#30363d" />
+  
+    <g fill="none" stroke="#e6edf3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" transform="translate(18 24) scale(3.5)">
+      
+      <path d="M3 14c.83 .642 2.077 1.017 3.5 1c1.423 .017 2.67 -.358 3.5 -1c.83 -.642 2.077 -1.017 3.5 -1c1.423 -.017 2.67 .358 3.5 1" />
+      <path d="M8 3a2.4 2.4 0 0 0 -1 2a2.4 2.4 0 0 0 1 2" />
+      <path d="M12 3a2.4 2.4 0 0 0 -1 2a2.4 2.4 0 0 0 1 2" />
+      <path d="M3 10h14v5a6 6 0 0 1 -6 6h-2a6 6 0 0 1 -6 -6v-5" />
+      <path d="M16.746 16.726a3 3 0 1 0 .252 -5.555" />
+  
+    </g>
+  
+  <g font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif">
+    <text x="118" y="45" fill="#8b949e" font-size="12">Most recent cup  ·  Nov 10, 2026</text>
+    <text fill="#e6edf3" font-size="15" font-weight="600"><tspan x="118" y="73">Presta Coffee Roasters Ethiopia Honey Koke</tspan></text>
+    <text x="118" y="99" fill="#e3b77b" font-size="13">v60  ·  18g · 297g · 208°F</text>
+  </g>
+</svg>

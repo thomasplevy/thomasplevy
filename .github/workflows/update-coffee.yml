@@ -1,0 +1,60 @@
+name: Update last coffee
+
+on:
+  schedule:
+    - cron: "20 * * * *"
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/update-coffee.mjs"
+      - ".github/workflows/update-coffee.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-coffee
+  cancel-in-progress: true
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Generate coffee widget
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_BREWS_DATA_SOURCE_ID: ${{ secrets.NOTION_BREWS_DATA_SOURCE_ID }}
+          NOTION_SHOTS_DATA_SOURCE_ID: ${{ secrets.NOTION_SHOTS_DATA_SOURCE_ID }}
+          COFFEE_TIMEZONE: ${{ vars.COFFEE_TIMEZONE }}
+          NOTION_PROP_DATE: ${{ vars.NOTION_PROP_DATE }}
+          NOTION_PROP_COFFEE: ${{ vars.NOTION_PROP_COFFEE }}
+          NOTION_PROP_METHOD: ${{ vars.NOTION_PROP_METHOD }}
+          NOTION_PROP_DOSE: ${{ vars.NOTION_PROP_DOSE }}
+          NOTION_PROP_WATER: ${{ vars.NOTION_PROP_WATER }}
+          NOTION_PROP_YIELD: ${{ vars.NOTION_PROP_YIELD }}
+          NOTION_PROP_TEMPERATURE: ${{ vars.NOTION_PROP_TEMPERATURE }}
+        run: |
+          if [ -z "$NOTION_TOKEN" ]; then
+            echo "Skipping: add NOTION_TOKEN, NOTION_BREWS_DATA_SOURCE_ID, and NOTION_SHOTS_DATA_SOURCE_ID as repository secrets."
+            exit 0
+          fi
+          node scripts/update-coffee.mjs
+
+      - name: Commit widget if it changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/coffee-light.svg assets/coffee-dark.svg README.md
+          if git diff --cached --quiet; then
+            echo "No coffee widget changes"
+            exit 0
+          fi
+          git commit -m "chore: refresh last coffee"
+          git push

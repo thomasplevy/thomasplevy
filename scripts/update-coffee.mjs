@@ -7,7 +7,7 @@
  * for extra tables). Preview with --demo, --demo-shot, --shot, --brew,
  * COFFEE_KIND=shot|brew, or COFFEE_DEMO=1. Optional: COFFEE_TIMEZONE, NOTION_PROP_DATE,
  * NOTION_PROP_COFFEE, NOTION_PROP_METHOD, NOTION_PROP_DOSE,
- * NOTION_PROP_WATER, NOTION_PROP_YIELD, NOTION_PROP_TEMPERATURE.
+ * NOTION_PROP_WATER, NOTION_PROP_YIELD, NOTION_PROP_TEMPERATURE, NOTION_PROP_ID.
  *
  * Cup icons are based on Tabler Icons "coffee" by Paweł Kuna.
  * https://github.com/tabler/tabler-icons
@@ -23,8 +23,12 @@ const ASSETS = join(ROOT, "assets");
 const README = join(ROOT, "README.md");
 const NOTION_VERSION = "2026-03-11";
 const CARD_WIDTH = 600;
-const NAME_MAX_CHARS = 44;
 const CARD_HEIGHT = 136;
+const NAME_MAX_CHARS = 44;
+const TEXT_X = 28;
+const ICON_SCALE = 3.5;
+const ICON_SIZE = 24 * ICON_SCALE;
+const ICON_PAD = 18;
 const WIDGET_START = "<!--START_COFFEE_WIDGET-->";
 const WIDGET_END = "<!--END_COFFEE_WIDGET-->";
 
@@ -49,6 +53,7 @@ const THEMES = {
 
 const FIELD_HINTS = {
   date: [/date/i, /brewed/i, /drank/i, /^when\b/i, /timestamp/i],
+  recordId: [/^id$/i, /^auto.?id$/i],
   coffee: [/coffee/i, /^bean/i],
   method: [/method/i, /^brewer/i, /^device/i],
   dose: [/^dose/i, /coffee dose/i, /^grounds/i, /^in$/i],
@@ -60,6 +65,7 @@ const FIELD_HINTS = {
 const NUMBER_TYPES = new Set(["number", "formula", "rollup", "rich_text"]);
 const METHOD_TYPES = new Set(["relation", "select", "rich_text", "title", "rollup"]);
 const COFFEE_TYPES = new Set(["relation", "title", "rich_text", "rollup"]);
+const ID_TYPES = new Set(["unique_id", "title", "rich_text", "formula"]);
 
 function loadDotEnv(path) {
   if (!existsSync(path)) {
@@ -226,12 +232,44 @@ function dateKey(iso, timeZone) {
 function formatDate(iso, timeZone) {
   const hasTime = iso.includes("T");
   const date = hasTime ? new Date(iso) : new Date(`${iso}T12:00:00Z`);
-  return new Intl.DateTimeFormat("en-US", {
+  const datePart = new Intl.DateTimeFormat("en-US", {
     timeZone: hasTime ? timeZone : "UTC",
     month: "short",
     day: "numeric",
     year: "numeric",
   }).format(date);
+  if (!hasTime) {
+    return datePart;
+  }
+  const timePart = new Intl.DateTimeFormat("en-US", {
+    timeZone,
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  })
+    .format(date)
+    .replace(/\u202f/g, " ");
+  return `${datePart}, ${timePart}`;
+}
+
+function idFrom(prop) {
+  if (!prop) {
+    return "";
+  }
+  if (prop.type === "unique_id" && prop.unique_id?.number != null) {
+    const prefix = prop.unique_id.prefix;
+    return prefix ? `${prefix}-${prop.unique_id.number}` : String(prop.unique_id.number);
+  }
+  if (prop.type === "title") {
+    return plainText(prop.title);
+  }
+  if (prop.type === "rich_text") {
+    return plainText(prop.rich_text);
+  }
+  if (prop.type === "formula" && prop.formula?.type === "string") {
+    return (prop.formula.string ?? "").trim();
+  }
+  return "";
 }
 
 function formatQty(value, unit) {
@@ -252,6 +290,7 @@ function formatTemp(value) {
 
 const TYPE_RANK = {
   relation: 0,
+  unique_id: 0,
   select: 1,
   date: 1,
   number: 1,
@@ -286,6 +325,12 @@ function mapSchema(schema) {
   const date =
     findProperty(schema, FIELD_HINTS.date, new Set(["date", "formula"]), env("NOTION_PROP_DATE")) ??
     findProperty(schema, FIELD_HINTS.date, new Set(["created_time"]));
+  const recordId = findProperty(
+    schema,
+    FIELD_HINTS.recordId,
+    ID_TYPES,
+    env("NOTION_PROP_ID")
+  );
   const coffee = findProperty(
     schema,
     FIELD_HINTS.coffee,
@@ -317,6 +362,7 @@ function mapSchema(schema) {
     dataSourceId: schema.id,
     name: schema.name ?? schema.id,
     date,
+    recordId,
     coffee,
     method,
     dose,
@@ -433,6 +479,7 @@ function toCup(page, mapping, kind, coffeeName, methodName, timeZone) {
     name: coffeeName || titleFromPage(page) || "Unknown coffee",
     method: methodName || (kind === "shot" ? "Espresso" : ""),
     recipe: recipe.join(" · "),
+    recordId: idFrom(page.properties?.[mapping.recordId?.name]),
     dateLabel: formatDate(iso, timeZone),
     day: dateKey(iso, timeZone),
     sortTime: iso.includes("T") ? Date.parse(iso) : Date.parse(`${iso}T00:00:00Z`),
@@ -453,7 +500,7 @@ function chooseCup(brews, shots) {
 }
 
 function logMapping(kind, mapping) {
-  const fields = ["date", "coffee", "method", "dose", "water", "yield", "temperature"]
+  const fields = ["date", "recordId", "coffee", "method", "dose", "water", "yield", "temperature"]
     .map((field) => `${field}=${mapping[field]?.name ?? "(none)"}`)
     .join(", ");
   console.log(`[${kind}] ${mapping.name}: ${fields}`);
@@ -493,8 +540,9 @@ function tablerCoffeeMarkup(includeHandle) {
 }
 
 function cupIconMarkup(theme, kind) {
+  const iconX = CARD_WIDTH - ICON_PAD - ICON_SIZE;
   return `
-    <g fill="none" stroke="${theme.icon}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" transform="translate(18 24) scale(3.5)">
+    <g fill="none" stroke="${theme.icon}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" transform="translate(${iconX} 24) scale(${ICON_SCALE})">
       ${tablerCoffeeMarkup(kind !== "shot")}
     </g>
   `;
@@ -509,6 +557,8 @@ function renderSvg(cup, themeName) {
   const method = empty ? "" : cup.method;
   const recipe = empty ? "" : cup.recipe;
   const date = empty ? "" : cup.dateLabel;
+  const recordId = empty ? "" : cup.recordId;
+  const kickerLine = [kicker, recordId, date].filter(Boolean).join("  ·  ");
   const details = [method, recipe].filter(Boolean).join("  ·  ");
   const detailLine = details || (empty ? "Log a brew or shot in Notion" : "");
   const twoLines = nameLines.length > 1;
@@ -529,7 +579,7 @@ function renderSvg(cup, themeName) {
   const nameTspans = nameLines
     .map(
       (line, index) =>
-        `<tspan x="118" y="${nameStartY + index * nameLineHeight}">${escapeXml(line)}</tspan>`
+        `<tspan x="${TEXT_X}" y="${nameStartY + index * nameLineHeight}">${escapeXml(line)}</tspan>`
     )
     .join("");
 
@@ -540,9 +590,9 @@ function renderSvg(cup, themeName) {
   <rect x="0.75" y="0.75" width="${CARD_WIDTH - 1.5}" height="${CARD_HEIGHT - 1.5}" rx="12" fill="${theme.bg}" stroke="${theme.border}" />
   ${cupIconMarkup(theme, empty ? "brew" : cup.kind)}
   <g font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif">
-    <text x="118" y="${kickerY}" fill="${theme.muted}" font-size="${kickerSize}">${escapeXml(date ? `${kicker}  ·  ${date}` : kicker)}</text>
+    <text x="${TEXT_X}" y="${kickerY}" fill="${theme.muted}" font-size="${kickerSize}">${escapeXml(kickerLine)}</text>
     <text fill="${theme.name}" font-size="${nameSize}" font-weight="600">${nameTspans}</text>
-    ${detailLine ? `<text x="118" y="${detailsY}" fill="${details ? theme.accent : theme.muted}" font-size="13">${escapeXml(detailLine)}</text>` : ""}
+    ${detailLine ? `<text x="${TEXT_X}" y="${detailsY}" fill="${details ? theme.accent : theme.muted}" font-size="13">${escapeXml(detailLine)}</text>` : ""}
   </g>
 </svg>
 `;
@@ -559,7 +609,7 @@ function writeIfChanged(path, contents) {
 
 function upsertReadme(cup, bust) {
   const alt = cup
-    ? `Most recent ${cup.kind === "shot" ? "shot" : "cup"}: ${displayCoffeeName(cup.name)}, ${cup.method}${cup.recipe ? `, ${cup.recipe}` : ""}, ${cup.dateLabel}`
+    ? `Most recent ${cup.kind === "shot" ? "shot" : "cup"}: ${[cup.recordId, displayCoffeeName(cup.name), cup.method, cup.recipe, cup.dateLabel].filter(Boolean).join(", ")}`
     : "Most recent coffee";
   const light = `./assets/coffee-light.svg?t=${bust}`;
   const dark = `./assets/coffee-dark.svg?t=${bust}`;
@@ -587,6 +637,7 @@ function fixtureCup(kind = "brew") {
       name: "Ethiopia Guji",
       method: "Espresso",
       recipe: "18g · 36g · 93°C",
+      recordId: "SHOT-1001",
       dateLabel: "Mar 10, 2026",
       day: "2026-03-10",
       sortTime: Date.parse("2026-03-10T00:00:00Z"),
@@ -597,7 +648,8 @@ function fixtureCup(kind = "brew") {
     name: "Ethiopia Guji",
     method: "V60",
     recipe: "15g · 250g · 96°C",
-    dateLabel: "Mar 10, 2026",
+    recordId: "BREW-1001",
+    dateLabel: "Mar 10, 2026, 8:30 AM",
     day: "2026-03-10",
     sortTime: Date.parse("2026-03-10T00:00:00Z"),
   };
@@ -618,6 +670,11 @@ function selfTest() {
       "strips trailing month/year",
     ],
     [displayCoffeeName("Ethiopia Guji") === "Ethiopia Guji", "leaves names without a harvest suffix"],
+    [formatDate("2026-11-11", "America/Phoenix") === "Nov 11, 2026", "date-only omits time"],
+    [
+      formatDate("2026-11-11T08:36:00.000-07:00", "America/Phoenix") === "Nov 11, 2026, 8:36 AM",
+      "datetime includes 12-hour time",
+    ],
   ];
   for (const [ok, label] of checks) {
     if (!ok) {

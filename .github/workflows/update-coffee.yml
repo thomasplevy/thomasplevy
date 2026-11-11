@@ -2,7 +2,10 @@ name: Update last coffee
 
 on:
   schedule:
-    - cron: "20 * * * *"
+    # Times are UTC; America/Phoenix is UTC-7 year-round.
+    - cron: "20 13-19 * * *" # hourly 6am-12pm
+    - cron: "20 22 * * *" # 3pm
+    - cron: "20 1 * * *" # 6pm
   workflow_dispatch:
   push:
     branches: [main]
@@ -33,6 +36,7 @@ jobs:
           NOTION_BREWS_DATA_SOURCE_ID: ${{ secrets.NOTION_BREWS_DATA_SOURCE_ID }}
           NOTION_SHOTS_DATA_SOURCE_ID: ${{ secrets.NOTION_SHOTS_DATA_SOURCE_ID }}
           COFFEE_TIMEZONE: ${{ vars.COFFEE_TIMEZONE }}
+          NOTION_PROP_ID: ${{ vars.NOTION_PROP_ID }}
           NOTION_PROP_DATE: ${{ vars.NOTION_PROP_DATE }}
           NOTION_PROP_COFFEE: ${{ vars.NOTION_PROP_COFFEE }}
           NOTION_PROP_METHOD: ${{ vars.NOTION_PROP_METHOD }}

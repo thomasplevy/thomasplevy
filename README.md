@@ -12,9 +12,9 @@ For more information about me check out [tomweights.com](https://tomweights.com)
 
 <!--START_COFFEE_WIDGET-->
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./assets/coffee-dark.svg?t=1794516689860" />
-  <source media="(prefers-color-scheme: light)" srcset="./assets/coffee-light.svg?t=1794516689860" />
-  <img alt="Most recent cup: BREW-5253, Presta Coffee Roasters Ethiopia Honey Koke, v60, 18.5g · 305.3g · 208°F, Nov 12, 2026, 8:57 AM" src="./assets/coffee-light.svg?t=1794516689860" width="600" height="136" />
+  <source media="(prefers-color-scheme: dark)" srcset="./assets/coffee-dark.svg?t=1794601812254" />
+  <source media="(prefers-color-scheme: light)" srcset="./assets/coffee-light.svg?t=1794601812254" />
+  <img alt="Most recent shot: SHOT-1800, Presta Coffee Roasters Ethiopia Honey Koke, Espresso, 21.6g · 42g · 206°F, Nov 13, 2026, 8:13 AM" src="./assets/coffee-light.svg?t=1794601812254" width="600" height="136" />
 </picture>
 <!--END_COFFEE_WIDGET-->
 

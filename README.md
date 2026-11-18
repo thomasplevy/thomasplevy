@@ -12,9 +12,9 @@ For more information about me check out [tomweights.com](https://tomweights.com)
 
 <!--START_COFFEE_WIDGET-->
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./assets/coffee-dark.svg?t=1794952097379" />
-  <source media="(prefers-color-scheme: light)" srcset="./assets/coffee-light.svg?t=1794952097379" />
-  <img alt="Most recent cup: BREW-5262, Shavi Coffee Roasters Burundi Washed Turqco Ngozi &amp; Kayanza, Aeropress, 14.9g · 245.9g · 207°F, Nov 17, 2026, 1:09 PM" src="./assets/coffee-light.svg?t=1794952097379" width="600" height="136" />
+  <source media="(prefers-color-scheme: dark)" srcset="./assets/coffee-dark.svg?t=1795037230126" />
+  <source media="(prefers-color-scheme: light)" srcset="./assets/coffee-light.svg?t=1795037230126" />
+  <img alt="Most recent shot: SHOT-1802, Shavi Coffee Roasters Ethiopia Natural Bombe Abore Bensa, Espresso, 21.6g · 57.6g · 209°F, Nov 18, 2026" src="./assets/coffee-light.svg?t=1795037230126" width="600" height="136" />
 </picture>
 <!--END_COFFEE_WIDGET-->
 

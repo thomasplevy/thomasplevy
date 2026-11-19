@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="600" height="136" viewBox="0 0 600 136" role="img" aria-label="Most recent shot: Shavi Coffee Roasters Ethiopia Natural Bombe Abore Bensa">
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="136" viewBox="0 0 600 136" role="img" aria-label="Most recent cup: Shavi Coffee Roasters Ethiopia Natural Bombe Abore Bensa">
   <!-- Icon based on Tabler Icons "coffee" by Paweł Kuna. MIT License. https://github.com/tabler/tabler-icons Copyright (c) 2020-2026 Paweł Kuna. -->
-  <title>Most recent shot: Shavi Coffee Roasters Ethiopia Natural Bombe Abore Bensa</title>
+  <title>Most recent cup: Shavi Coffee Roasters Ethiopia Natural Bombe Abore Bensa</title>
   <rect x="0.75" y="0.75" width="598.5" height="134.5" rx="12" fill="#0d1117" stroke="#30363d" />
   
     <g fill="none" stroke="#e6edf3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" transform="translate(498 24) scale(3.5)">
@@ -10,13 +10,13 @@
       <path d="M8 3a2.4 2.4 0 0 0 -1 2a2.4 2.4 0 0 0 1 2" />
       <path d="M12 3a2.4 2.4 0 0 0 -1 2a2.4 2.4 0 0 0 1 2" />
       <path d="M3 10h14v5a6 6 0 0 1 -6 6h-2a6 6 0 0 1 -6 -6v-5" />
-      
+      <path d="M16.746 16.726a3 3 0 1 0 .252 -5.555" />
   
     </g>
   
   <g font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif">
-    <text x="28" y="35" fill="#8b949e" font-size="12">Most recent shot  ·  SHOT-1802  ·  Nov 18, 2026</text>
+    <text x="28" y="35" fill="#8b949e" font-size="12">Most recent cup  ·  BREW-5265  ·  Nov 19, 2026, 10:25 AM</text>
     <text fill="#e6edf3" font-size="15" font-weight="600"><tspan x="28" y="63">Shavi Coffee Roasters Ethiopia Natural Bombe</tspan><tspan x="28" y="83">Abore Bensa</tspan></text>
-    <text x="28" y="109" fill="#e3b77b" font-size="13">Espresso  ·  21.6g · 57.6g · 209°F</text>
+    <text x="28" y="109" fill="#e3b77b" font-size="13">Aeropress  ·  17.9g · 295.4g · 207°F</text>
   </g>
 </svg>

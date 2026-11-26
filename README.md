@@ -12,9 +12,9 @@ For more information about me check out [tomweights.com](https://tomweights.com)
 
 <!--START_COFFEE_WIDGET-->
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./assets/coffee-dark.svg?t=1795646130439" />
-  <source media="(prefers-color-scheme: light)" srcset="./assets/coffee-light.svg?t=1795646130439" />
-  <img alt="Most recent cup: BREW-5276, Shavi Coffee Roasters Ethiopia Natural Bombe Abore Bensa, v60, 18.2g · 300.3g · 208°F, Nov 25, 2026, 8:35 AM" src="./assets/coffee-light.svg?t=1795646130439" width="600" height="136" />
+  <source media="(prefers-color-scheme: dark)" srcset="./assets/coffee-dark.svg?t=1795731805851" />
+  <source media="(prefers-color-scheme: light)" srcset="./assets/coffee-light.svg?t=1795731805851" />
+  <img alt="Most recent cup: BREW-5278, Passion House Coffee Peru Washed Milly Grace Amazonas, San Iganacio, Cajamarca, Aeropress, 18g · 297g · 208°F, Nov 26, 2026, 12:44 PM" src="./assets/coffee-light.svg?t=1795731805851" width="600" height="136" />
 </picture>
 <!--END_COFFEE_WIDGET-->
 
